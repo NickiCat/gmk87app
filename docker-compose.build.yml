@@ -1,0 +1,24 @@
+# Builds all three Linux packages in parallel: ./build-docker.sh
+x-build-common: &common
+  volumes:
+    - ./dist:/app/dist
+  environment:
+    HOST_UID: ${HOST_UID:-1000}
+    HOST_GID: ${HOST_GID:-1000}
+
+services:
+  build-deb:
+    <<: *common
+    build:
+      context: .
+      dockerfile: docker/debian.Dockerfile
+  build-arch:
+    <<: *common
+    build:
+      context: .
+      dockerfile: docker/arch.Dockerfile
+  build-fedora:
+    <<: *common
+    build:
+      context: .
+      dockerfile: docker/fedora.Dockerfile

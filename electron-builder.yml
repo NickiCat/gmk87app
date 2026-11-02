@@ -1,0 +1,39 @@
+appId: space.nicko.gmk87control
+productName: GMK87 Control
+executableName: gmk87-control
+copyright: Copyright © 2026 Nickola Sidorov
+directories:
+  output: dist
+  buildResources: build
+files:
+  - out/**
+  - package.json
+asarUnpack:
+  - node_modules/node-hid/**
+# node-hid ships N-API prebuilds that load in Electron as is; rebuilding would need libudev headers.
+npmRebuild: false
+extraResources:
+  - from: resources/50-gmk87.rules
+    to: 50-gmk87.rules
+linux:
+  target: [deb, pacman] # .rpm: scripts/build-rpm.sh (fpm 1.9.3 breaks on rpm >= 4.20)
+  category: Utility
+  maintainer: Nickola Sidorov <86476954+NickiCat@users.noreply.github.com>
+  synopsis: Configurator for the Zuoya GMK87 keyboard
+  description: Keymap remapping, RGB lighting, display images and clock sync for the Zuoya GMK87.
+  desktop:
+    Name: GMK87 Control
+    Comment: Configure the Zuoya GMK87 keyboard
+    Categories: Utility;Settings;HardwareSettings;
+deb:
+  artifactName: ${name}_${version}_amd64.deb
+  afterInstall: build/linux/after-install.sh
+  afterRemove: build/linux/after-remove.sh
+  depends: [libgtk-3-0, libnotify4, libnss3, libxss1, libxtst6, xdg-utils, libatspi2.0-0, libuuid1, libsecret-1-0, libudev1]
+pacman:
+  artifactName: ${name}-${version}-1-x86_64.pkg.tar.zst
+  fpm:
+    - --pacman-compression
+    - zstd
+  afterInstall: build/linux/after-install.sh
+  afterRemove: build/linux/after-remove.sh

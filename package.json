@@ -1,0 +1,43 @@
+{
+  "name": "gmk87-control",
+  "productName": "GMK87 Control",
+  "version": "0.1.0",
+  "description": "Configurator for the Zuoya GMK87 keyboard: keymap, lighting, display and clock",
+  "main": "./out/main/index.js",
+  "author": "Nickola Sidorov <86476954+NickiCat@users.noreply.github.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/NickiCat/gmk87app",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
+    "test": "vitest run",
+    "start": "electron-vite preview",
+    "dist": "npm run build && electron-builder --linux deb pacman && SKIP_UNPACK=1 ./scripts/build-rpm.sh",
+    "dist:deb": "npm run build && electron-builder --linux deb",
+    "dist:pacman": "npm run build && electron-builder --linux pacman",
+    "dist:rpm": "npm run build && ./scripts/build-rpm.sh"
+  },
+  "dependencies": {
+    "node-hid": "^3.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8",
+    "electron-vite": "^2.3.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11",
+    "vitest": "^2.1.9"
+  },
+  "allowScripts": {
+    "electron": true,
+    "esbuild": true,
+    "node-hid": true
+  }
+}

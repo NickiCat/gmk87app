@@ -1,0 +1,26 @@
+# A pushed tag v* builds the Linux packages in Docker and publishes them as a GitHub release.
+name: Release
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build packages
+        run: ./build-docker.sh
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="$GITHUB_REF_NAME"
+          ls -l dist
+          test -f dist/*.deb && test -f dist/*.pkg.tar.zst && test -f dist/*.rpm && test -s dist/SHA256SUMS
+          gh release create "$tag" --verify-tag --title "GMK87 Control ${tag#v}" --notes-file ".github/release-notes/$tag.md" \
+            dist/*.deb dist/*.pkg.tar.zst dist/*.rpm dist/SHA256SUMS
